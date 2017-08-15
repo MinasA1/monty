@@ -38,6 +38,7 @@ int main(int ac, char **av)
 		}
 		processor(line, ln, &top);
 	}
+	free_stack(&top);
 	free(buffer);
 	fclose(inst);
 	return (0);
@@ -70,4 +71,20 @@ int processor(char *line, unsigned int ln, stack_t **top)
 	}
 	printf("L%u: unknown instruction %s\n", ln, line);
 	exit(EXIT_FAILURE);
+}
+
+/**
+ * free_stack - deallocates memory used by stack
+ * @top: double pointer to stack's top
+ */
+void free_stack(stack_t **top)
+{
+	stack_t *temp;
+
+	while(*top)
+	{
+		temp = *top;
+		*top = (*top)->prev;
+		free(temp);
+	}
 }

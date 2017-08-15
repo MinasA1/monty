@@ -39,4 +39,8 @@ int processor(char *line, unsigned int ln, stack_t **bot);
 /*OPCODE INSTRUCTION FUNCTIONS*/
 int push(stack_t **top, char *n, unsigned int ln);
 void pall(stack_t **head, unsigned int line_number);
+
+/*FREE MEMORY*/
+void free_stack(stack_t **top);
+
 #endif
