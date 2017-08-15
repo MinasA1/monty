@@ -33,6 +33,7 @@ typedef struct instruction_s
 	char *opcode;
 	void (*f)(stack_t **stack, unsigned int line_number);
 } instruction_t;
+
 /*INSTRUCTION PROCESS*/
 int processor(char *line, unsigned int ln, stack_t **bot);
 
@@ -42,5 +43,6 @@ void pall(stack_t **head, unsigned int line_number);
 
 /*FREE MEMORY*/
 void free_stack(stack_t **top);
+void free_mem(FILE *inst, char *buffer,stack_t **top);
 
 #endif

@@ -5,7 +5,7 @@
  * @top: pointer to stack's bottom
  * @n: string containing int to add
  * @ln: index for instruction
- * Return: 0 if success EXIT_FAILURE if fails
+ * Return: 0 if success 1 if fails
  */
 int push(stack_t **top, char *n, unsigned int ln)
 {
@@ -17,7 +17,7 @@ int push(stack_t **top, char *n, unsigned int ln)
 		if (!isdigit(n[i]))
 		{
 			printf("L%u: usage: push integer\n", ln);
-			exit(EXIT_FAILURE);
+		        return (1);
 		}
 		i++;
 	}
@@ -26,7 +26,7 @@ int push(stack_t **top, char *n, unsigned int ln)
 	if (!new)
 	{
 		printf("Error: malloc failed\n");
-		exit(EXIT_FAILURE);
+		return (1);
 	}
 	if (!top)
 	{

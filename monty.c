@@ -33,10 +33,12 @@ int main(int ac, char **av)
 		if (!strcmp(line, "push"))
 		{
 			n = strtok(NULL, " \t\n");
-			push(&top, n, ln);
+			if(push(&top, n, ln))
+				free_mem(inst, buffer, &top);
 			continue;
 		}
-		processor(line, ln, &top);
+		if(processor(line, ln, &top))
+			free_mem(inst, buffer, &top);
 	}
 	free_stack(&top);
 	free(buffer);
@@ -50,7 +52,7 @@ int main(int ac, char **av)
  * @n: value to push in stack
  * @ln: index of instuction
  * @top: double pointer to top of stack
- * Return: 0 if executes EXIT_FAILURE if fails
+ * Return: 0 if executes 1 if fails
  */
 int processor(char *line, unsigned int ln, stack_t **top)
 {
@@ -70,7 +72,7 @@ int processor(char *line, unsigned int ln, stack_t **top)
 		i++;
 	}
 	printf("L%u: unknown instruction %s\n", ln, line);
-	exit(EXIT_FAILURE);
+	return (1);
 }
 
 /**
@@ -87,4 +89,18 @@ void free_stack(stack_t **top)
 		*top = (*top)->prev;
 		free(temp);
 	}
+}
+
+/**
+ * free_mem - free memory and EXIT_FAILURE
+ * @inst: file to close
+ * @buffer: buffer that holds input from file
+ * @top: double pointer to stack's top
+ */
+void free_mem(FILE *inst, char *buffer,stack_t **top)
+{
+	free_stack(top);
+	free(buffer);
+	fclose(inst);
+	exit(EXIT_FAILURE);
 }
