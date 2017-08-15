@@ -5,22 +5,23 @@
  * @top: pointer to stack's bottom
  * @n: string containing int to add
  * @ln: index for instruction
- * return: 0 if success EXIT_FAILURE if fails
+ * Return: 0 if success EXIT_FAILURE if fails
  */
-int push(stack_t **top, char *n)
+int push(stack_t **top, char *n, unsigned int ln)
 {
 	stack_t *new;
-	int num;
+	int num, i = 0;
 
-	if (strlen(n) != 1)
-		num = atoi(n);
-	else if (strlen(n) == 1 && !n[0])
-		num = 0;
-	else
+	while (n[i])
 	{
-		printf("L%u: usage: push integer\n", ln);
-		exit(EXIT_FAILURE);
+		if (!isdigit(n[i]))
+		{
+			printf("L%u: usage: push integer\n", ln);
+			exit(EXIT_FAILURE);
+		}
+		i++;
 	}
+	num = atoi(n);
 	new = malloc(sizeof(stack_t));
 	if (!new)
 	{
@@ -37,9 +38,26 @@ int push(stack_t **top, char *n)
 	else
 	{
 		new->next = NULL;
-		new->n num;
+		new->n = num;
 		new->prev = *top;
 		*top = new;
 	}
-	return(0);
+	return (0);
+}
+/**
+ * pall - prints all values in stack, from top to bottom
+ * @head: double pointer to top of stack
+ * @line_number: index of instruction
+ * Return: void
+ */
+void pall(stack_t **head, unsigned int line_number)
+{
+	stack_t *temp = *head;
+
+	(void)line_number;
+	while (temp)
+	{
+		printf("%d\n", temp->n);
+		temp = temp->prev;
+	}
 }

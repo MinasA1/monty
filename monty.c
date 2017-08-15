@@ -12,7 +12,7 @@ int main(int ac, char **av)
 	FILE *inst;
 	size_t size;
 	char *buffer = NULL, *line, *n;
-	stack_t *bot = NULL;
+	stack_t *top = NULL;
 	unsigned int ln = 0;
 
 	if (ac != 2)
@@ -21,7 +21,7 @@ int main(int ac, char **av)
 		exit(EXIT_FAILURE);
 	}
 	inst = fopen(av[1], "r");
-	if (inst)
+	if (!inst)
 	{
 		printf("Error: Can't open file %s\n", av[1]);
 		exit(EXIT_FAILURE);
@@ -31,40 +31,43 @@ int main(int ac, char **av)
 		ln++;
 		line = strtok(buffer, " \t\n");
 		if (!strcmp(line, "push"))
+		{
 			n = strtok(NULL, " \t\n");
-		processor(line, n, ln, &bot);
+			push(&top, n, ln);
+			continue;
+		}
+		processor(line, ln, &top);
 	}
 	free(buffer);
 	fclose(inst);
 	return (0);
 }
 
-
 /**
  * processor - checks for instruction and executes it
  * @line: instruction
  * @n: value to push in stack
  * @ln: index of instuction
- * @bot: pointer to stack's bottom
+ * @top: double pointer to top of stack
  * Return: 0 if executes EXIT_FAILURE if fails
  */
-int processor(char *line, char *n, unsigned int ln, stack_t **bot)
+int processor(char *line, unsigned int ln, stack_t **top)
 {
-	static instruction_t codes[] ={
+	static instruction_t codes[] = {
 		{"pall", pall},
 		{NULL, NULL}
 	};
 	unsigned int i = 0;
 
-	while (code[i])
+	while (codes[i].opcode)
 	{
-		if (!strcmp(code[i].opcode, line))
+		if (!strcmp(codes[i].opcode, line))
 		{
-			code[i].f(bot, ln);
+			codes[i].f(top, ln);
 			return (0);
 		}
 		i++;
 	}
-	printf("L%u: unknown instruction %s\n" ln, line);
+	printf("L%u: unknown instruction %s\n", ln, line);
 	exit(EXIT_FAILURE);
 }
