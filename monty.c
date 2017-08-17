@@ -16,6 +16,7 @@ int main(int ac, char **av)
 	stack_t *top = NULL;
 	unsigned int ln = 0;
 
+	glob.mode = 0;
 	glob.buffer = NULL;
 	if (ac != 2)
 	{
@@ -35,7 +36,7 @@ int main(int ac, char **av)
 		if (!strcmp(line, "push"))
 		{
 			n = strtok(NULL, " \t\n#");
-			push(&top, n, ln);
+			push(&top, make_int(&top, n, ln));
 			continue;
 		}
 		processor(line, ln, &top);
@@ -69,6 +70,8 @@ int processor(char *line, unsigned int ln, stack_t **top)
 		{"pstr", pstr},
 		{"rotl", rotl},
 		{"rotr", rotr},
+		{"stack", stack},
+		{"queue", queue},
 		{NULL, NULL}
 	};
 	unsigned int i = 0;
@@ -113,4 +116,27 @@ void free_mem(stack_t **top)
 	free(glob.buffer);
 	fclose(glob.inst);
 	exit(EXIT_FAILURE);
+}
+/**
+ * make_int - converts string to int
+ * @top: double pointer to stack's top
+ * @n: string holding int
+ * @ln: line index
+ * Return: converted int or free_mem
+ */
+int make_int(stack_t **top, char *n, unsigned int ln)
+{
+	int num = 0, i = 0;
+
+	while (n[i])
+	{
+		if (!isdigit(n[i]))
+		{
+			printf("L%u: usage: push integer\n", ln);
+			free_mem(top);
+		}
+		i++;
+	}
+	num = atoi(n);
+	return (num);
 }

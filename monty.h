@@ -9,11 +9,13 @@
  * struct global - holds the input FILEstream and the buffer
  * @inst: input FILEstream
  * @buffer: buffer to save line input
+ * @mode: switches between queue and stack modes
  */
 struct global
 {
 	FILE *inst;
 	char *buffer;
+	int mode;
 };
 
 extern struct global glob;
@@ -53,7 +55,7 @@ typedef struct instruction_s
 int processor(char *line, unsigned int ln, stack_t **bot);
 
 /*OPCODE INSTRUCTION FUNCTIONS*/
-void push(stack_t **top, char *n, unsigned int ln);
+void push(stack_t **top, int n);
 void pall(stack_t **head, unsigned int line_number);
 void pint(stack_t **top, unsigned int line_number);
 void pop(stack_t **top, unsigned int line_number);
@@ -67,7 +69,9 @@ void pchar(stack_t **head, unsigned int line_number);
 void pstr(stack_t **head, unsigned int line_number);
 void rotl(stack_t **head, unsigned int line_number);
 void rotr(stack_t **head, unsigned int line_number);
-
+void stack(stack_t **top, unsigned int line_number);
+void queue(stack_t **top, unsigned int line_number);
+int make_int(stack_t **top, char *n,unsigned int ln);
 /*FREE MEMORY*/
 void free_stack(stack_t **top);
 void free_mem(stack_t **top);

@@ -13,7 +13,7 @@ void pchar(stack_t **head, unsigned int line_number)
 		printf("L%u: can't pchar, stack empty\n", line_number);
 		free_mem(head);
 	}
-	if ( 0 <= (*head)->n && (*head)->n <= 127)
+	if (0 <= (*head)->n && 127 >= (*head)->n)
 		printf("%c\n", (*head)->n);
 	else
 	{
@@ -35,13 +35,13 @@ void pstr(stack_t **head, unsigned int line_number)
 	if (!*head)
 		printf("\n");
 	temp = *head;
-	while(temp)
+	while (temp)
 	{
-		if ( (0 <= temp->n && temp->n <= 127) || !temp->n)
+		if ((0 <= temp->n && 127 >= temp->n) || !temp->n)
 			printf("\n");
 		else
 			printf("%c", temp->n);
-		temp= temp->prev;
+		temp = temp->prev;
 	}
 }
 /**
@@ -57,7 +57,7 @@ void rotl(stack_t **head, unsigned int line_number)
 
 	(void)line_number;
 	temp = *head;
-	while(temp->prev)
+	while (temp->prev)
 	{
 		a = temp->n;
 		temp->n = temp->prev->n;
@@ -78,9 +78,9 @@ void rotr(stack_t **head, unsigned int line_number)
 
 	(void)line_number;
 	temp = *head;
-	while(temp->prev)
+	while (temp->prev)
 		temp = temp->prev;
-	while(temp->next)
+	while (temp->next)
 	{
 		a = temp->n;
 		temp->n = temp->next->n;

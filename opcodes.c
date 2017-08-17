@@ -3,45 +3,47 @@
 /**
  * push - adds a number in stack
  * @top: pointer to stack's bottom
- * @n: string containing int to add
- * @ln: index for instruction
+ * @n: number to add to stack
  * Return: void
  */
-void push(stack_t **top, char *n, unsigned int ln)
+void push(stack_t **top, int n)
 {
-	stack_t *new;
-	int num, i = 0;
+	stack_t *new, *temp;
 
-	while (n[i])
-	{
-		if (!isdigit(n[i]))
-		{
-			printf("L%u: usage: push integer\n", ln);
-			free_mem(top);
-		}
-		i++;
-	}
-	num = atoi(n);
 	new = malloc(sizeof(stack_t));
 	if (!new)
 	{
 		printf("Error: malloc failed\n");
 		free_mem(top);
 	}
-	if (!*top)
+	if (!glob.mode)
 	{
+		if (!*top)
+			new->prev = NULL;
+		else
+		{
+			new->prev = *top;
+			new->prev->next = new;
+		}
 		new->next = NULL;
-		new->n = num;
-		new->prev = NULL;
+		new->n = n;
 		*top = new;
 	}
 	else
 	{
+		new->n = n;
+		new->prev = NULL;
 		new->next = NULL;
-		new->n = num;
-		new->prev = *top;
-		new->prev->next = new;
-		*top = new;
+		if (!*top)
+			*top = new;
+		else
+		{
+			temp = *top;
+			while (temp->prev)
+				temp = temp->prev;
+			new->next = temp;
+			temp->prev = new;
+		}
 	}
 }
 /**
