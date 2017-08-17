@@ -11,6 +11,8 @@ sub
 pall
 swap
 pall
+       pchar
+       pall
 div
 pall
 nop
