@@ -1,5 +1,26 @@
 #include "monty.h"
-
+/**
+ * mod - mods the stack's top two elements
+ * @head: double pointer to top of stack
+ * @line_number: index of instruction
+ * Return: void
+ */
+void mod(stack_t **head, unsigned int line_number)
+{
+	if (!(*head)->prev || !*head)
+	{
+		printf("L%u: can't div, stack too short\n", line_number);
+		free_mem(head);
+	}
+	if (!(*head)->n)
+	{
+		printf("L%u: division by zero\n", line_number);
+		free_mem(head);
+	}
+	(*head)->prev->n %= (*head)->n;
+	*head = (*head)->prev;
+	free((*head)->next);
+}
 /**
  * pchar - prints the char at the top of stack
  * @head: pointer to stack's top

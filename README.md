@@ -30,11 +30,22 @@ push 2
 			    push 6
 ```
 #### The monty program
-`Usage: monty file`
-where 'file' is the path to the file containing Monty byte code
 ##### Compile:
 `gcc -Wall -Werror -Wextra -pedantic *.c -o monty`
-
+##### Usage:
+`./monty file` where 'file' is the path to the file containing Monty byte code
+##### Example:
+```
+cat -e bytecodes/00.m
+push 1$
+push 2$
+push 3$
+pall$
+$ ./monty bytecodes/00.m
+3
+2
+1
+```
 #### Instructions - Opcodes:
 
 ```
@@ -61,9 +72,44 @@ queue /*sets push mode to FIFO*/
 Every good language comes with the capability of commenting. When the first non-space character of a line is `#`, line is treated as a comment.
 
 #### Files:
-monty.c
-monty.h
-opcodes.c
-opcodes2.c
-opcodes3.c
-mode.c
+##### monty.c
+```
+Functions:
+int main(int ac, char **av); --- main interpreters function
+int processor(char *line, unsigned int ln, stack_t **top); --- parses input line
+void free_stack(stack_t **top); --- free's the stack/double linked list
+void free_mem(stack_t **top); --- free's allocated memory and EXIT_FAILURE
+int make_int(stack_t **top, char *n, unsigned int ln); --- converts string to int and returns it
+```
+##### monty.h
+`header file containing all function's and struct's prototypes`
+##### opcodes.c
+```
+void push(stack_t **top, int n); --- instruction push
+void pall(stack_t **head, unsigned int line_number); --- instruction pall
+void pint(stack_t **head, unsigned int line_number); --- instruction pint
+void pop(stack_t **head, unsigned int line_number); --- instruction pop
+void swap(stack_t **head, unsigned int line_number); --- instruction swap
+```
+##### opcodes2.c
+```
+void add(stack_t **head, unsigned int line_number); --- instruction add
+void sub(stack_t **head, unsigned int line_number); --- instruction sub
+void nop(stack_t **head, unsigned int line_number); --- instruction nop
+void mul(stack_t **head, unsigned int line_number); --- instruction mul
+void divv(stack_t **head, unsigned int line_number); --- instruction div
+```
+##### opcodes3.c
+```
+void mod(stack_t **head, unsigned int line_number); --- instruction mod
+void pchar(stack_t **head, unsigned int line_number); --- instruction pchar
+void pstr(stack_t **head, unsigned int line_number); --- instruction pstr
+void rotl(stack_t **head, unsigned int line_number); --- instruction rotl
+void rotr(stack_t **head, unsigned int line_number); --- instruction rotr
+```
+##### mode.c
+
+```
+void queue(stack_t **head, unsigned int line_number); --- instruction queue
+void stack(stack_t **head, unsigned int line_number); --- instruction stack
+```

@@ -76,7 +76,7 @@ void pint(stack_t **head, unsigned int line_number)
 		printf("L%u: can't pint, stack empty\n", line_number);
 		free_mem(head);
 	}
-	printf("%d", (*head)->n);
+	printf("%d\n", (*head)->n);
 }
 
 /**
