@@ -66,6 +66,9 @@ int processor(char *line, unsigned int ln, stack_t **top)
 		{"mul", mul},
 		{"div", divv},
 		{"pchar", pchar},
+		{"pstr", pstr},
+		{"rotl", rotl},
+		{"rotr", rotr},
 		{NULL, NULL}
 	};
 	unsigned int i = 0;
