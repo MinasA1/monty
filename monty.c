@@ -5,11 +5,10 @@ struct global glob;
 
 /**
 * main - interpreter for Monty ByteCodes files
-* ac - arguments count
-* av - arguments string
+* @ac:  arguments count
+* @av: arguments string
 * Return: 0 if success , EXIT_FAILURE if fails
 */
-
 int main(int ac, char **av)
 {
 	size_t size;
@@ -32,10 +31,10 @@ int main(int ac, char **av)
 	while (getline(&glob.buffer, &size, glob.inst) != -1)
 	{
 		ln++;
-		line = strtok(glob.buffer, " \t\n");
+		line = strtok(glob.buffer, " \t\n#");
 		if (!strcmp(line, "push"))
 		{
-			n = strtok(NULL, " \t\n");
+			n = strtok(NULL, " \t\n#");
 			push(&top, n, ln);
 			continue;
 		}
@@ -50,7 +49,6 @@ int main(int ac, char **av)
 /**
  * processor - checks for instruction and executes it
  * @line: instruction
- * @n: value to push in stack
  * @ln: index of instuction
  * @top: double pointer to top of stack
  * Return: void
@@ -62,6 +60,12 @@ int processor(char *line, unsigned int ln, stack_t **top)
 		{"pint", pint},
 		{"pop", pop},
 		{"swap", swap},
+		{"add", add},
+		{"sub", sub},
+		{"nop", nop},
+		{"mul", mul},
+		{"div", divv},
+		{"pchar", pchar},
 		{NULL, NULL}
 	};
 	unsigned int i = 0;
@@ -88,7 +92,7 @@ void free_stack(stack_t **top)
 {
 	stack_t *temp;
 
-	while(*top)
+	while (*top)
 	{
 		temp = *top;
 		*top = (*top)->prev;

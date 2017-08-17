@@ -5,6 +5,11 @@
 #include <string.h>
 #include <ctype.h>
 
+/**
+ * struct global - holds the input FILEstream and the buffer
+ * @inst: input FILEstream
+ * @buffer: buffer to save line input
+ */
 struct global
 {
 	FILE *inst;
@@ -53,6 +58,12 @@ void pall(stack_t **head, unsigned int line_number);
 void pint(stack_t **top, unsigned int line_number);
 void pop(stack_t **top, unsigned int line_number);
 void swap(stack_t **head, unsigned int line_number);
+void add(stack_t **head, unsigned int line_number);
+void sub(stack_t **head, unsigned int line_number);
+void nop(stack_t **head, unsigned int line_number);
+void divv(stack_t **head, unsigned int line_number);
+void mul(stack_t **head, unsigned int line_number);
+void pchar(stack_t **head, unsigned int line_number);
 
 /*FREE MEMORY*/
 void free_stack(stack_t **top);

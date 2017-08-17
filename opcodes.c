@@ -17,7 +17,7 @@ void push(stack_t **top, char *n, unsigned int ln)
 		if (!isdigit(n[i]))
 		{
 			printf("L%u: usage: push integer\n", ln);
-		        free_mem(top);
+			free_mem(top);
 		}
 		i++;
 	}
@@ -105,16 +105,14 @@ void pop(stack_t **head, unsigned int line_number)
  */
 void swap(stack_t **head, unsigned int line_number)
 {
-	stack_t *temp;
+	int a;
 
 	if (!(*head)->prev || !*head)
-	{printf("L%u: can't swap, stack too short\n", line_number);
+	{
+		printf("L%u: can't swap, stack too short\n", line_number);
 		free_mem(head);
 	}
-	temp = (*head)->prev;
-	temp->next = NULL;
-	(*head)->prev = temp->prev;
-	(*head)->next = temp;
-	temp->prev = *head;
-	*head = temp;
+	a = (*head)->n;
+	(*head)->n = (*head)->prev->n;
+	(*head)->prev->n = a;
 }
