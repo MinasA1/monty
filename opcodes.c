@@ -5,9 +5,9 @@
  * @top: pointer to stack's bottom
  * @n: string containing int to add
  * @ln: index for instruction
- * Return: 0 if success 1 if fails
+ * Return: void
  */
-int push(stack_t **top, char *n, unsigned int ln)
+void push(stack_t **top, char *n, unsigned int ln)
 {
 	stack_t *new;
 	int num, i = 0;
@@ -17,7 +17,7 @@ int push(stack_t **top, char *n, unsigned int ln)
 		if (!isdigit(n[i]))
 		{
 			printf("L%u: usage: push integer\n", ln);
-		        return (1);
+		        free_mem(top);
 		}
 		i++;
 	}
@@ -26,9 +26,9 @@ int push(stack_t **top, char *n, unsigned int ln)
 	if (!new)
 	{
 		printf("Error: malloc failed\n");
-		return (1);
+		free_mem(top);
 	}
-	if (!top)
+	if (!*top)
 	{
 		new->next = NULL;
 		new->n = num;
@@ -40,9 +40,9 @@ int push(stack_t **top, char *n, unsigned int ln)
 		new->next = NULL;
 		new->n = num;
 		new->prev = *top;
+		new->prev->next = new;
 		*top = new;
 	}
-	return (0);
 }
 /**
  * pall - prints all values in stack, from top to bottom
@@ -60,4 +60,61 @@ void pall(stack_t **head, unsigned int line_number)
 		printf("%d\n", temp->n);
 		temp = temp->prev;
 	}
+}
+/**
+ * pint - prints the value at the stack's top
+ * @head: double pointer to top of stack
+ * @line_number: index of instruction
+ * Return: void
+ */
+void pint(stack_t **head, unsigned int line_number)
+{
+	if (!*head)
+	{
+		printf("L%u: can't pint, stack empty\n", line_number);
+		free_mem(head);
+	}
+	printf("%d", (*head)->n);
+}
+
+/**
+ * pop - removes the stack's top element
+ * @head: double pointer to top of stack
+ * @line_number: index of instruction
+ * Return: void
+ */
+void pop(stack_t **head, unsigned int line_number)
+{
+	stack_t *temp;
+
+	if (!*head)
+	{
+		printf("L%u: can't pop an empty stack\n", line_number);
+		free_mem(head);
+	}
+	temp = *head;
+	*head = (*head)->prev;
+	(*head)->next = NULL;
+	free(temp);
+}
+/**
+ * swap - swaps the stack's top two elements
+ * @head: double pointer to top of stack
+ * @line_number: index of instruction
+ * Return: void
+ */
+void swap(stack_t **head, unsigned int line_number)
+{
+	stack_t *temp;
+
+	if (!(*head)->prev || !*head)
+	{printf("L%u: can't swap, stack too short\n", line_number);
+		free_mem(head);
+	}
+	temp = (*head)->prev;
+	temp->next = NULL;
+	(*head)->prev = temp->prev;
+	(*head)->next = temp;
+	temp->prev = *head;
+	*head = temp;
 }

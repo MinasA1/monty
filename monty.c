@@ -1,5 +1,8 @@
 #include "monty.h"
 
+
+struct global glob;
+
 /**
 * main - interpreter for Monty ByteCodes files
 * ac - arguments count
@@ -9,40 +12,38 @@
 
 int main(int ac, char **av)
 {
-	FILE *inst;
 	size_t size;
-	char *buffer = NULL, *line, *n;
+	char *line, *n;
 	stack_t *top = NULL;
 	unsigned int ln = 0;
 
+	glob.buffer = NULL;
 	if (ac != 2)
 	{
 		printf("USAGE: monty file\n");
 		exit(EXIT_FAILURE);
 	}
-	inst = fopen(av[1], "r");
-	if (!inst)
+	glob.inst = fopen(av[1], "r");
+	if (!glob.inst)
 	{
 		printf("Error: Can't open file %s\n", av[1]);
 		exit(EXIT_FAILURE);
 	}
-	while (getline(&buffer, &size, inst) != -1)
+	while (getline(&glob.buffer, &size, glob.inst) != -1)
 	{
 		ln++;
-		line = strtok(buffer, " \t\n");
+		line = strtok(glob.buffer, " \t\n");
 		if (!strcmp(line, "push"))
 		{
 			n = strtok(NULL, " \t\n");
-			if(push(&top, n, ln))
-				free_mem(inst, buffer, &top);
+			push(&top, n, ln);
 			continue;
 		}
-		if(processor(line, ln, &top))
-			free_mem(inst, buffer, &top);
+		processor(line, ln, &top);
 	}
 	free_stack(&top);
-	free(buffer);
-	fclose(inst);
+	free(glob.buffer);
+	fclose(glob.inst);
 	return (0);
 }
 
@@ -52,12 +53,15 @@ int main(int ac, char **av)
  * @n: value to push in stack
  * @ln: index of instuction
  * @top: double pointer to top of stack
- * Return: 0 if executes 1 if fails
+ * Return: void
  */
 int processor(char *line, unsigned int ln, stack_t **top)
 {
 	static instruction_t codes[] = {
 		{"pall", pall},
+		{"pint", pint},
+		{"pop", pop},
+		{"swap", swap},
 		{NULL, NULL}
 	};
 	unsigned int i = 0;
@@ -67,11 +71,12 @@ int processor(char *line, unsigned int ln, stack_t **top)
 		if (!strcmp(codes[i].opcode, line))
 		{
 			codes[i].f(top, ln);
-			return (0);
+			return (1);
 		}
 		i++;
 	}
 	printf("L%u: unknown instruction %s\n", ln, line);
+	free_mem(top);
 	return (1);
 }
 
@@ -93,14 +98,12 @@ void free_stack(stack_t **top)
 
 /**
  * free_mem - free memory and EXIT_FAILURE
- * @inst: file to close
- * @buffer: buffer that holds input from file
  * @top: double pointer to stack's top
  */
-void free_mem(FILE *inst, char *buffer,stack_t **top)
+void free_mem(stack_t **top)
 {
 	free_stack(top);
-	free(buffer);
-	fclose(inst);
+	free(glob.buffer);
+	fclose(glob.inst);
 	exit(EXIT_FAILURE);
 }

@@ -4,6 +4,15 @@
 #include <stdlib.h>
 #include <string.h>
 #include <ctype.h>
+
+struct global
+{
+	FILE *inst;
+	char *buffer;
+};
+
+extern struct global glob;
+
 /**
  * struct stack_s - doubly linked list representation of a stack (or queue)
  * @n: integer
@@ -34,15 +43,19 @@ typedef struct instruction_s
 	void (*f)(stack_t **stack, unsigned int line_number);
 } instruction_t;
 
+
 /*INSTRUCTION PROCESS*/
 int processor(char *line, unsigned int ln, stack_t **bot);
 
 /*OPCODE INSTRUCTION FUNCTIONS*/
-int push(stack_t **top, char *n, unsigned int ln);
+void push(stack_t **top, char *n, unsigned int ln);
 void pall(stack_t **head, unsigned int line_number);
+void pint(stack_t **top, unsigned int line_number);
+void pop(stack_t **top, unsigned int line_number);
+void swap(stack_t **head, unsigned int line_number);
 
 /*FREE MEMORY*/
 void free_stack(stack_t **top);
-void free_mem(FILE *inst, char *buffer,stack_t **top);
+void free_mem(stack_t **top);
 
 #endif
