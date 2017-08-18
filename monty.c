@@ -32,12 +32,12 @@ int main(int ac, char **av)
 	while (getline(&glob.buffer, &size, glob.inst) != -1)
 	{
 		ln++;
-		line = strtok(glob.buffer, " \t\n");
+		line = strtok(glob.buffer, "\r \t\n");
 		if (line[0] == '#')
 			continue;
 		if (!strcmp(line, "push"))
 		{
-			n = strtok(NULL, " \t\n");
+			n = strtok(NULL, "\r \t\n");
 			push(&top, make_int(&top, n, ln));
 			continue;
 		}
