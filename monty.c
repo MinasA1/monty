@@ -129,17 +129,22 @@ void free_mem(stack_t **top)
  */
 int make_int(stack_t **top, char *n, unsigned int ln)
 {
-	int num = 0, i = 0;
+	int num = 1, i = 0;
 
+	if (n[0] == '-')
+	{
+		i = 1;
+		num = -1;
+	}
 	while (n[i])
 	{
-		if (!isdigit(n[i]))
+		if (!isdigit(n[i]) &&)
 		{
 			printf("L%u: usage: push integer\n", ln);
 			free_mem(top);
 		}
 		i++;
 	}
-	num = atoi(n);
+	num *= atoi(n);
 	return (num);
 }
